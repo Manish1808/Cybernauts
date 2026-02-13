@@ -1,4 +1,5 @@
 const express = require("express");
+// Trigger restart for blog updates
 const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
@@ -26,6 +27,8 @@ const loginRoutes = require("./routes/login.route");
 const contactRoutes = require("./routes/contact.route");
 const blogRoutes = require("./routes/blog.route");
 const mailRoutes = require("./routes/mail.route");
+const certificateRoutes = require("./routes/certificate.route");
+const feedbackRoutes = require("./routes/feedback.route");
 // routing of endpoints
 app.use("/admin", isAuthenticated, adminRoutes);
 app.use("/events", eventRoutes);
@@ -34,6 +37,8 @@ app.use("/auth", loginRoutes);
 app.use("/contact", contactRoutes);
 app.use("/blogs", blogRoutes);
 app.use("/announce", mailRoutes);
+app.use("/certificate", certificateRoutes);
+app.use("/feedback", feedbackRoutes);
 
 app.use(errorHandler);
 app.listen(PORT, () => {

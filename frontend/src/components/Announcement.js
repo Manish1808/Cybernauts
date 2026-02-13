@@ -29,12 +29,16 @@ export default function Announcement() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const mails = [];
-    if (selectedBranches.includes("CSE"))
-      mails.push("yashwanth.k0620@gmail.com");
-    if (selectedBranches.includes("IT")) mails.push("shanigalavamshi@gmail.com");
-    if (selectedBranches.includes("CSIT")) mails.push("rakeshkasthuri03@gmail.com");
-    const data = { mails, notice: message };
+    if (selectedBranches.length === 0) {
+      toast.error("Please select at least one branch.");
+      return;
+    }
+
+    const data = {
+      notice: message,
+      branches: selectedBranches
+    };
+
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_BACKEND_URI}/announce`,
@@ -42,14 +46,18 @@ export default function Announcement() {
         {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token"),
+            "Content-Type": "application/json",
           },
         }
       );
       if (response.status === 200) {
-        toast.success("Announcement send successfully...");
+        toast.success(response.data.message);
+        setMessage("");
+        setSelectedBranches([]);
       }
     } catch (error) {
-      toast.error("Failed to announce...");
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to announce...");
     }
   };
 
@@ -62,9 +70,8 @@ export default function Announcement() {
             {branches.map((branch) => (
               <div
                 key={branch.name}
-                className={`branch-item ${
-                  selectedBranches.includes(branch.name) ? "selected" : ""
-                }`}
+                className={`branch-item ${selectedBranches.includes(branch.name) ? "selected" : ""
+                  }`}
                 onClick={() => handleBranchClick(branch.name)}
               >
                 <img
@@ -79,6 +86,9 @@ export default function Announcement() {
               </div>
             ))}
           </div>
+
+
+
           {/* Message Box */}
           <textarea
             className="message-box"
