@@ -56,7 +56,7 @@ const BlogPage = () => {
             </div>
           ))
         ) : (
-          <p>No blogs available</p>
+          <p>No blogs available.</p>
         )}
       </section>
     </div>
